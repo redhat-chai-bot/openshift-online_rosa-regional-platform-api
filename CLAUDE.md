@@ -21,6 +21,7 @@ make clean           # Remove build artifacts
 ```
 
 ### Integration & E2E Tests
+
 ```bash
 make e2e-init-db         # Initialize test database
 make e2e-authz-infra-up  # Start authorization test infrastructure
