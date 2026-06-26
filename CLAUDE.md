@@ -6,7 +6,7 @@ This file provides guidance to AI coding assistants when working with this repos
 
 ## Project Overview
 
-ROSA Regional Platform API — a stateless gateway API for ROSA HCP regional cluster management. Provides REST and gRPC interfaces for managing clusters within a specific cloud region.
+ROSA Regional Platform API — a stateless gateway API for ROSA HCP regional cluster management. Provides REST interfaces for managing clusters within a specific cloud region.
 
 ## Build & Test Commands
 
@@ -21,6 +21,7 @@ make clean           # Remove build artifacts
 ```
 
 ### Integration & E2E Tests
+
 ```bash
 make e2e-init-db         # Initialize test database
 make e2e-authz-infra-up  # Start authorization test infrastructure
@@ -32,7 +33,7 @@ make e2e-authz-infra-down # Stop authorization test infrastructure
 - **cmd/**: Application entry points
 - **pkg/**: Core application code
   - API handlers, services, and data access
-  - gRPC and REST server implementations
+  - REST server implementation (gRPC used only as outgoing client to Maestro)
   - `pkg/zoa/` — ZOA Trusted Actions handlers for FedRAMP-compliant service delivery operations
 - **internal/**: Internal packages (not importable by external modules)
 - **docs/**: API documentation and design references
