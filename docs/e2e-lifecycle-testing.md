@@ -2,6 +2,8 @@
 
 Design document for end-to-end testing across the full HCP lifecycle on a management cluster.
 
+> **Scope**: This document covers the HCP lifecycle test suite (`test/e2e-cli/`). The ZOA Trusted Actions tests are a separate suite at `test/e2e-zoa/` — see `make test-e2e-zoa`. In CI, ZOA tests run after the platform API tests and before the HCP lifecycle tests.
+
 ## Problem
 
 As the platform grows, feature developers need a predictable way to hook tests into the HCP lifecycle without understanding the entire test suite. Today, tests are ordered implicitly by file position within a single `Ordered` Ginkgo suite. Labels exist (`setup`, `create`, `monitor`, `cleanup`) but aren't formalized — there's no contract about what state is available at each phase, no way to slot new tests between phases, and no enforcement that reserved labels aren't misused.

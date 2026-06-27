@@ -26,6 +26,11 @@ go test -v
 - `E2E_TOKEN`: Authentication token for API requests
 - `E2E_RHOBS_API_URL`: RHOBS API Gateway URL for observability tests (optional — tests are skipped if unset)
 
+## Related Test Suites
+
+- **ZOA Trusted Actions**: `test/e2e-zoa/` — end-to-end tests for Zero Operator Access execution and audit (`make test-e2e-zoa`)
+- **HCP Lifecycle**: `test/e2e-cli/` — full cluster create/monitor/teardown via `rosactl`
+
 ## Note
 
 These are integration/functional tests, separate from unit tests in `pkg/`.
