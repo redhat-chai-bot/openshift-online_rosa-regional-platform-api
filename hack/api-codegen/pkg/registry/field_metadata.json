@@ -1,0 +1,1998 @@
+[
+  {
+    "fieldPath": "ami",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "imageType",
+    "writeMode": "immutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "instanceProfile",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "instanceType",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "placement",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rootVolume.encrypted",
+    "writeMode": "service-set",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rootVolume.encryptionKey",
+    "writeMode": "service-set",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rootVolume.iops",
+    "writeMode": "service-set",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rootVolume.size",
+    "writeMode": "immutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rootVolume.type",
+    "writeMode": "service-set",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "securityGroups",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "subnet",
+    "writeMode": "mutable",
+    "ownerType": "AWSNodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "additionalAllowedPrincipals",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "cloudProviderConfig",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "endpointAccess",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "multiArch",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "region",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "rolesRef",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "serviceEndpoints",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "sharedVPC",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "terminationHandlerQueueURL",
+    "writeMode": "mutable",
+    "ownerType": "AWSPlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "disabled",
+    "writeMode": "immutable",
+    "ownerType": "Capabilities",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "enabled",
+    "writeMode": "immutable",
+    "ownerType": "Capabilities",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "spec.accountId",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.additionalTrustBundle",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.creatorARN",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.deleteProtection",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.dnsReservationId",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.expirationTimestamp",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.additionalTrustBundle",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.auditWebhook",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.autoNode",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.autoscaling",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.capabilities.disabled",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.capabilities.enabled",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.channel",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.clusterID",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.authentication",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.authentication.oidcProviders",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.authentication.type",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.featureGate",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.image",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress.componentRoutes",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress.componentRoutes.hostname",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress.componentRoutes.name",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress.componentRoutes.namespace",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.ingress.componentRoutes.servingCertKeyPairSecret",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.allowedUnsafeSysctls",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.containerLogMaxFiles",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.containerLogMaxSize",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.cpuManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.cpuManagerPolicyOptions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.cpuManagerReconcilePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.evictionHard",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.evictionSoft",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.evictionSoftGracePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.imageGCHighThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.imageGCLowThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.imageMinimumGCAge",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.kubeReserved",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.maxPods",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.memoryThrottlingFactor",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.podPidsLimit",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.registryBurst",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.registryPullQPS",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.serializeImagePulls",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.streamingConnectionIdleTimeout",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.systemReserved",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.topologyManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.kubelet.topologyManagerScope",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.allowedKernelArguments",
+    "writeMode": "immutable",
+    "featureGate": "SeaplaneMachineConfig",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.extensions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.files",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.kernelArguments",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.kernelType",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.machineConfig.systemdUnits",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.network",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.oauth",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy.httpProxy",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy.httpsProxy",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy.noProxy",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy.readinessEndpoints",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.proxy.trustedCA",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.scheduler",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.configuration.scheduler.profile",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.controlPlaneRelease",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.controllerAvailabilityPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.dns.baseDomain",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.dns.baseDomainPrefix",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.dns.privateZoneID",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.dns.publicZoneID",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.etcd",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.fips",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.imageContentSources",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.infraID",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.infrastructureAvailabilityPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.issuerURL",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.kubeAPIServerDNSName",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.labels",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.allocateNodeCIDRs",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.apiServer",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.clusterNetwork",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.machineNetwork",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.networkType",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.networking.serviceNetwork",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.nodeSelector",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.olmCatalogPlacement",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.operatorConfiguration",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.pausedUntil",
+    "writeMode": "service-set",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.additionalAllowedPrincipals",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.cloudProviderConfig",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.endpointAccess",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.multiArch",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.region",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.rolesRef",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.serviceEndpoints",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.sharedVPC",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.aws.terminationHandlerQueueURL",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.platform.type",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.pullSecret",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.release",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.secretEncryption",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.serviceAccountSigningKey",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.services",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.sshKey",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.tolerations",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedCluster.updateService",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.hostedClusterName",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.oidcConfigId",
+    "writeMode": "immutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.properties",
+    "writeMode": "mutable",
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "spec.tags",
+    "writeMode": "mutable",
+    "resettable": true,
+    "ownerType": "Cluster",
+    "ownerGVK": "seaplane.io/v1alpha1.Cluster"
+  },
+  {
+    "fieldPath": "oidcProviders",
+    "writeMode": "mutable",
+    "ownerType": "ClusterAuthentication",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "type",
+    "writeMode": "mutable",
+    "ownerType": "ClusterAuthentication",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "authentication",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "authentication.oidcProviders",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "authentication.type",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "featureGate",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "image",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress.componentRoutes",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress.componentRoutes.hostname",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress.componentRoutes.name",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress.componentRoutes.namespace",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "ingress.componentRoutes.servingCertKeyPairSecret",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.allowedUnsafeSysctls",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.containerLogMaxFiles",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.containerLogMaxSize",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.cpuManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.cpuManagerPolicyOptions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.cpuManagerReconcilePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.evictionHard",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.evictionSoft",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.evictionSoftGracePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.imageGCHighThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.imageGCLowThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.imageMinimumGCAge",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.kubeReserved",
+    "writeMode": "immutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.maxPods",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.memoryThrottlingFactor",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.podPidsLimit",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.registryBurst",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.registryPullQPS",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.serializeImagePulls",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.streamingConnectionIdleTimeout",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.systemReserved",
+    "writeMode": "immutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.topologyManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubelet.topologyManagerScope",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.allowedKernelArguments",
+    "writeMode": "immutable",
+    "featureGate": "SeaplaneMachineConfig",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.extensions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.files",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.kernelArguments",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.kernelType",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineConfig.systemdUnits",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "network",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "oauth",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy.httpProxy",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy.httpsProxy",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy.noProxy",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy.readinessEndpoints",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "proxy.trustedCA",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "scheduler",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "scheduler.profile",
+    "writeMode": "mutable",
+    "ownerType": "ClusterConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "baseDomain",
+    "writeMode": "service-set",
+    "ownerType": "ClusterDNS",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "baseDomainPrefix",
+    "writeMode": "immutable",
+    "ownerType": "ClusterDNS",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "privateZoneID",
+    "writeMode": "service-set",
+    "ownerType": "ClusterDNS",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "publicZoneID",
+    "writeMode": "service-set",
+    "ownerType": "ClusterDNS",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "allocateNodeCIDRs",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "apiServer",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "clusterNetwork",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "machineNetwork",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "networkType",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "serviceNetwork",
+    "writeMode": "immutable",
+    "ownerType": "ClusterNetworking",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "hostname",
+    "writeMode": "mutable",
+    "ownerType": "ComponentRouteConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "name",
+    "writeMode": "mutable",
+    "ownerType": "ComponentRouteConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "namespace",
+    "writeMode": "mutable",
+    "ownerType": "ComponentRouteConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "servingCertKeyPairSecret",
+    "writeMode": "mutable",
+    "ownerType": "ComponentRouteConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "spec.clusterDeletionPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "DNSReservation",
+    "ownerGVK": "seaplane.io/v1alpha1.DNSReservation"
+  },
+  {
+    "fieldPath": "componentRoutes",
+    "writeMode": "mutable",
+    "ownerType": "IngressConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "componentRoutes.hostname",
+    "writeMode": "mutable",
+    "ownerType": "IngressConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "componentRoutes.name",
+    "writeMode": "mutable",
+    "ownerType": "IngressConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "componentRoutes.namespace",
+    "writeMode": "mutable",
+    "ownerType": "IngressConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "componentRoutes.servingCertKeyPairSecret",
+    "writeMode": "mutable",
+    "ownerType": "IngressConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "allowedUnsafeSysctls",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "containerLogMaxFiles",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "containerLogMaxSize",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "cpuManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "cpuManagerPolicyOptions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "cpuManagerReconcilePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "evictionHard",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "evictionSoft",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "evictionSoftGracePeriod",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "imageGCHighThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "imageGCLowThresholdPercent",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "imageMinimumGCAge",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kubeReserved",
+    "writeMode": "immutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "maxPods",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "memoryThrottlingFactor",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "podPidsLimit",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "registryBurst",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "registryPullQPS",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "serializeImagePulls",
+    "writeMode": "mutable",
+    "featureGate": "SeaplaneKubeletAdvanced",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "streamingConnectionIdleTimeout",
+    "writeMode": "mutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "systemReserved",
+    "writeMode": "immutable",
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "topologyManagerPolicy",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "topologyManagerScope",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "KubeletConfig",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "allowedKernelArguments",
+    "writeMode": "immutable",
+    "featureGate": "SeaplaneMachineConfig",
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "extensions",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "files",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kernelArguments",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "kernelType",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "systemdUnits",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "MachineConfigSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "spec.accountId",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.autoRepair",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.ec2InstanceMetadataHttpTokens",
+    "writeMode": "immutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.internalPoolId",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.labels",
+    "writeMode": "mutable",
+    "resettable": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.maxSurge",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.maxUnavailable",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.arch",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.autoScaling",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.clusterName",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.config",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.management",
+    "writeMode": "service-set",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.nodeDrainTimeout",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.nodeLabels",
+    "writeMode": "mutable",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.nodeVolumeDetachTimeout",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.osImageStream",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.pausedUntil",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.ami",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.imageType",
+    "writeMode": "immutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.instanceProfile",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.instanceType",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.placement",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.rootVolume.encrypted",
+    "writeMode": "service-set",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.rootVolume.encryptionKey",
+    "writeMode": "service-set",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.rootVolume.iops",
+    "writeMode": "service-set",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.rootVolume.size",
+    "writeMode": "immutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.rootVolume.type",
+    "writeMode": "service-set",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.securityGroups",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.aws.subnet",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.platform.type",
+    "writeMode": "immutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.release",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.replicas",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.taints",
+    "writeMode": "mutable",
+    "hidden": true,
+    "resettable": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.nodePool.tuningConfig",
+    "writeMode": "mutable",
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "spec.tags",
+    "writeMode": "mutable",
+    "resettable": true,
+    "ownerType": "NodePool",
+    "ownerGVK": "seaplane.io/v1alpha1.NodePool"
+  },
+  {
+    "fieldPath": "aws.ami",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.imageType",
+    "writeMode": "immutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.instanceProfile",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.instanceType",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.placement",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rootVolume.encrypted",
+    "writeMode": "service-set",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rootVolume.encryptionKey",
+    "writeMode": "service-set",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rootVolume.iops",
+    "writeMode": "service-set",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rootVolume.size",
+    "writeMode": "immutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rootVolume.type",
+    "writeMode": "service-set",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.securityGroups",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.subnet",
+    "writeMode": "mutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "type",
+    "writeMode": "immutable",
+    "ownerType": "NodePoolPlatform",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "spec.accountId",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "OidcConfig",
+    "ownerGVK": "seaplane.io/v1alpha1.OidcConfig"
+  },
+  {
+    "fieldPath": "spec.installerRoleArn",
+    "writeMode": "immutable",
+    "ownerType": "OidcConfig",
+    "ownerGVK": "seaplane.io/v1alpha1.OidcConfig"
+  },
+  {
+    "fieldPath": "spec.issuerUrl",
+    "writeMode": "immutable",
+    "ownerType": "OidcConfig",
+    "ownerGVK": "seaplane.io/v1alpha1.OidcConfig"
+  },
+  {
+    "fieldPath": "spec.secretArn",
+    "writeMode": "immutable",
+    "ownerType": "OidcConfig",
+    "ownerGVK": "seaplane.io/v1alpha1.OidcConfig"
+  },
+  {
+    "fieldPath": "spec.type",
+    "writeMode": "immutable",
+    "ownerType": "OidcConfig",
+    "ownerGVK": "seaplane.io/v1alpha1.OidcConfig"
+  },
+  {
+    "fieldPath": "aws.additionalAllowedPrincipals",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.cloudProviderConfig",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.endpointAccess",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.multiArch",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.region",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.resourceTags",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.rolesRef",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.serviceEndpoints",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.sharedVPC",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "aws.terminationHandlerQueueURL",
+    "writeMode": "mutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "type",
+    "writeMode": "immutable",
+    "ownerType": "PlatformSpec",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "httpProxy",
+    "writeMode": "mutable",
+    "ownerType": "ProxyConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "httpsProxy",
+    "writeMode": "mutable",
+    "ownerType": "ProxyConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "noProxy",
+    "writeMode": "mutable",
+    "ownerType": "ProxyConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "readinessEndpoints",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ProxyConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "trustedCA",
+    "writeMode": "service-set",
+    "hidden": true,
+    "ownerType": "ProxyConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "profile",
+    "writeMode": "mutable",
+    "ownerType": "SchedulerConfiguration",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "encrypted",
+    "writeMode": "service-set",
+    "ownerType": "Volume",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "encryptionKey",
+    "writeMode": "service-set",
+    "ownerType": "Volume",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "iops",
+    "writeMode": "service-set",
+    "ownerType": "Volume",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "size",
+    "writeMode": "immutable",
+    "ownerType": "Volume",
+    "ownerGVK": ""
+  },
+  {
+    "fieldPath": "type",
+    "writeMode": "service-set",
+    "ownerType": "Volume",
+    "ownerGVK": ""
+  }
+]

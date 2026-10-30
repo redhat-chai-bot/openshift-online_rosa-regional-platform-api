@@ -1,339 +1,503 @@
-.PHONY: build test test-unit test-authz test-coverage test-e2e test-e2e-api test-e2e-cli test-e2e-platform-monitoring lint clean image image-push run generate generate-swagger help fmt vet
+.PHONY: help build test test-unit test-integration lint clean \
+	build-seaplane-db build-operator build-api build-api-codegen \
+	test-seaplane-db test-operator test-operator-int test-api test-api-int test-api-codegen test-clientset \
+	test-e2e test-e2e-api test-e2e-authz test-e2e-cli test-e2e-platform-monitoring test-e2e-zoa test-e2e-sdk test-e2e-rosa-cli \
+	test-e2e test-e2e-api test-e2e-cli test-e2e-platform-monitoring test-e2e-sdk \
+	fmt vet verify verify-mod deps mod-tidy \
+	manifests generate generate-deepcopy generate-clientset verify-clientset setup-envtest \
+	codegen-passthrough codegen-registry codegen-verify codegen verify-codegen \
+    codegen-passthrough-clobber \
+	codegen-conversion verify-conversion \
+	generate-openapi verify-openapi swagger-ui \
+	image-api image-operator image-push-api image-push-operator
 
-BINARY_NAME := rosa-regional-platform-api
-IMAGE_REPO ?= quay.io/openshift-online/rosa-regional-platform-api
-IMAGE_TAG ?= latest
-GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
-GOOS ?= linux
-GOARCH ?= amd64
-PLATFORMS ?= linux/amd64,linux/arm64
-# In Prow CI, ARTIFACT_DIR is set automatically; locally default to ./test-results
-TEST_OUTPUT_DIR ?= $(or $(ARTIFACT_DIR),./test-results)
-DYNAMODB_ENDPOINT ?= http://localhost:8180
-CEDAR_AGENT_ENDPOINT ?= http://localhost:8181
+# ── Configuration ────────────────────────────────────────────────────────
 
-# AWS settings - these can be overridden by environment variables or command line
+IMAGE_REPO_API      ?= quay.io/openshift-online/rosa-seaplane-api
+IMAGE_REPO_OPERATOR ?= quay.io/openshift-online/seaplane-operator
+IMAGE_TAG           ?= latest
+GIT_SHA             := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+GOOS                ?= linux
+GOARCH              ?= amd64
+PLATFORMS           ?= linux/amd64,linux/arm64
+
+TEST_OUTPUT_DIR     ?= $(or $(ARTIFACT_DIR),./test-results)
+
 AWS_PROFILE ?=
-AWS_REGION ?=
-FOCUS ?=
-SKIP ?= Authz
+AWS_REGION  ?=
+FOCUS       ?=
 
-# CI container settings - for reproducing Prow CI environment locally
-CI_IMAGE_REPO ?= quay.io/openshift-online/rosa-regional-platform-api-ci
-CI_IMAGE_TAG ?= latest
-REPO_URL ?= https://github.com/openshift-online/rosa-regional-platform-api
-GIT_REF ?= main
+ROSA_REPO_URL          ?= https://github.com/openshift/rosa
+ROSA_REPO_BRANCH       ?= seaplane-v2
+ROSA_MAKE_TARGET       ?= e2e-seaplane
+ROSA_BUILD_TARGET      ?= install
+ROSA_FOCUS      ?=
+ROSA_SKIP       ?=
+ROSA_LABEL_FILTER ?=
 
-# Detect host platform for native builds
-HOST_OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
-HOST_ARCH := $(shell uname -m)
-ifeq ($(HOST_ARCH),x86_64)
-	HOST_ARCH := amd64
-endif
-ifeq ($(HOST_ARCH),aarch64)
-	HOST_ARCH := arm64
-endif
+CONTAINER_ENGINE ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
-# Show available make targets
+TOOLS_DIR        := ./hack/tools
+TOOLS_BIN_DIR    := $(TOOLS_DIR)/bin
+GOLANGCI_LINT    := $(abspath $(TOOLS_BIN_DIR)/golangci-lint)
+CONTROLLER_GEN   := $(abspath $(TOOLS_BIN_DIR)/controller-gen)
+CLIENT_GEN       := $(abspath $(TOOLS_BIN_DIR)/client-gen)
+BRIDGE_GEN         := $(abspath $(TOOLS_BIN_DIR)/bridge-gen)
+PATHBIND_GEN       := $(abspath $(TOOLS_BIN_DIR)/pathbind-gen)
+SETUP_ENVTEST    := $(abspath $(TOOLS_BIN_DIR)/setup-envtest)
+GINKGO           := $(abspath $(TOOLS_BIN_DIR)/ginkgo)
+COVERAGE         ?=
+
+# ── SDK generation ───────────────────────────────────────────────────────
+SDK_MODULE        ?= github.com/openshift-online/rosa-seaplane-api
+SDK_API_PKG       ?= $(SDK_MODULE)/api
+SDK_INPUT         ?= v1alpha1/public
+SDK_CLIENTSET     ?= generated
+SDK_OUTPUT_DIR    ?= $(abspath clientset)
+SDK_OUTPUT_PKG    ?= $(SDK_MODULE)/clientset
+BRIDGE_INPUT_DIR        ?= $(abspath api/v1alpha1/public)
+BRIDGE_OUTPUT_DIR       ?= $(abspath clientset/transport)
+BRIDGE_OUTPUT_PKG       ?= transport
+PLATFORM_OUTPUT_DIR   ?= $(abspath clientset/platform)
+PLATFORM_OUTPUT_PKG   ?= platform
+TYPED_PKG_IMPORT      ?= $(SDK_MODULE)/clientset/generated/typed/v1alpha1/public
+API_PKG_IMPORT        ?= $(SDK_MODULE)/api/v1alpha1/public
+SDK_HEADER_FILE       ?= $(abspath hack/clientset/license-boilerplate.go.txt)
+
+# ── Code generation ───────────────────────────────────────────────────────
+OPENAPI_GENERATED ?= api/v1alpha1/public/generated-schemas.json
+OPENAPI_SPEC      ?= api/v1alpha1/public/openapi.yaml
+SWAGGER_UI_PORT ?= 8282
+
+$(GOLANGCI_LINT): $(TOOLS_DIR)/go.mod
+	cd $(TOOLS_DIR); go build -tags=tools -o $(abspath $(TOOLS_BIN_DIR))/golangci-lint github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+
+$(CONTROLLER_GEN): $(TOOLS_DIR)/go.mod
+	cd $(TOOLS_DIR); go build -tags=tools -o $(abspath $(TOOLS_BIN_DIR))/controller-gen sigs.k8s.io/controller-tools/cmd/controller-gen
+
+$(SETUP_ENVTEST): $(TOOLS_DIR)/go.mod
+	cd $(TOOLS_DIR); go build -tags=tools -o $(abspath $(TOOLS_BIN_DIR))/setup-envtest sigs.k8s.io/controller-runtime/tools/setup-envtest
+
+$(CLIENT_GEN): $(TOOLS_DIR)/go.mod
+	cd $(TOOLS_DIR); go build -tags=tools -o $(abspath $(TOOLS_BIN_DIR))/client-gen k8s.io/code-generator/cmd/client-gen
+
+$(BRIDGE_GEN): hack/clientset/cmd/bridge-gen/main.go
+	cd hack/clientset/cmd/bridge-gen && go build -o $(BRIDGE_GEN) .
+
+$(PATHBIND_GEN): $(wildcard clientset/cmd/pathbind-gen/*.go clientset/cmd/pathbind-gen/templates/*.go.tmpl)
+	cd clientset && go build -o $(PATHBIND_GEN) ./cmd/pathbind-gen
+
+$(GINKGO): $(TOOLS_DIR)/go.mod
+	cd $(TOOLS_DIR); go build -tags=tools -o $(abspath $(TOOLS_BIN_DIR))/ginkgo github.com/onsi/ginkgo/v2/ginkgo
+
+# ── Help ─────────────────────────────────────────────────────────────────
+
 help:
-	@echo "Available targets:"
+	@echo "Usage: make <target>"
 	@echo ""
-	@echo "Build & Run:"
-	@echo "  build          - Build the binary"
-	@echo "  run            - Run locally with debug settings"
-	@echo "  clean          - Clean build artifacts"
+	@echo "Build:"
+	@echo "  build                Build all components"
+	@echo "  build-api            Platform API server"
+	@echo "  build-operator       Seaplane operator (manager + compactor)"
+	@echo "  build-seaplane-db  Seaplane DB library"
+	@echo "  build-api-codegen    API codegen tools (build-time generators)"
 	@echo ""
-	@echo "Testing:"
-	@echo "  test                           - Run all unit tests (excludes e2e)"
-	@echo "  test-unit                      - Run unit tests for a specific package (PKG=./pkg/authz/...)"
-	@echo "  test-authz                     - Run authorization package tests only"
-	@echo "  test-coverage                  - Run unit tests with coverage report"
-	@echo "  test-e2e                       - Run e2e integration tests (native, excludes CLI tests)"
-	@echo "  test-e2e-cli                   - Run e2e CLI tests only (HCP cluster creation)"
-	@echo "  test-e2e-awscreds              - Run AWS credentials check test only"
-	@echo "  test-e2e-container             - Run e2e tests in container"
-	@echo "                                   Supports: AWS_PROFILE=..., FOCUS='pattern', SKIP='pattern'"
-	@echo "  test-e2e-authz                 - Run authz e2e tests with local infrastructure"
-	@echo ""
-	@echo "E2E Infrastructure:"
-	@echo "  e2e-authz-infra-up   - Start DynamoDB Local and cedar-agent containers"
-	@echo "  e2e-authz-infra-down - Stop E2E infrastructure"
-	@echo "  e2e-init-db    - Initialize DynamoDB tables"
+	@echo "Test:"
+	@echo "  test                 All tests (unit + integration)"
+	@echo "  test-unit            Unit tests: API + operator + codegen + clientset (no external services)"
+	@echo "  test-clientset       Clientset unit tests (transport, platform)"
+	@echo "  test-integration     Integration tests: seaplane-db + operator (podman) + API handlers"
+	@echo "  test-api-int         API handler integration tests (build tag: integration)"
+	@echo "  test-e2e-api         E2E API"
+	@echo "  test-e2e-authz       Local HTTP authorization (Podman PostgreSQL 16, no AWS credentials)"
+	@echo "  test-e2e-cli         E2E CLI"
+	@echo "  test-e2e-sdk         E2E SDK (Go clientset lifecycle)"
+	@echo "  test-e2e-rosa-cli    E2E rosa CLI (clones rosa repo, builds CLI, runs seaplane tests)"
+	@echo "                       Supports ROSA_FOCUS, ROSA_SKIP, ROSA_LABEL_FILTER"
+	@echo "  test-e2e-platform-monitoring  E2E monitoring"
 	@echo ""
 	@echo "Code Quality:"
-	@echo "  lint                - Run golangci-lint"
-	@echo "  lint-ci-container   - Run linter in CI container with fresh clone"
-	@echo "                        Supports: REPO_URL=..., GIT_REF=..."
-	@echo "  fmt                 - Format code with gofmt"
-	@echo "  vet                 - Run go vet"
-	@echo "  verify              - Verify go.mod is tidy"
-	@echo ""
-	@echo "Docker:"
-	@echo "  image                    - Build Docker image"
-	@echo "  image-push               - Push Docker image"
-	@echo "  image-e2e                - Build E2E test container (single platform)"
-	@echo "  image-e2e-multiarch      - Build E2E test container (multiarch)"
-	@echo "  image-e2e-push-multiarch - Build and push E2E test container (multiarch)"
+	@echo "  lint                 golangci-lint on all modules"
+	@echo "  fmt                  Format Go source"
+	@echo "  vet                  go vet on all modules"
+	@echo "  verify-mod           Verify go.mod tidiness"
 	@echo ""
 	@echo "Code Generation:"
-	@echo "  deps           - Download and tidy dependencies"
-	@echo "  generate       - Generate OpenAPI code"
-	@echo "  generate-swagger - Regenerate swagger-ui.html"
+	@echo "  manifests            Generate CRD manifests (controller-gen + CEL strip)"
+	@echo "  generate             Run all code generators in one pass"
+	@echo "  generate-deepcopy    Generate deepcopy methods only"
+	@echo "  verify               Fail if any generated output is out of date"
+	@echo "  generate-clientset   Generate typed client SDK from CRD types"
+	@echo "  verify-clientset     Fail if generated clientset is out of date"
+	@echo "  codegen-passthrough  Generate passthrough types from HyperShift"
+	@echo "  codegen-registry     Generate field metadata registry from markers"
+	@echo "  codegen-verify       Verify codegen outputs compile"
+	@echo "  codegen              Run full codegen pipeline (passthrough + registry + verify)"
+	@echo "  verify-codegen       Fail if codegen outputs are out of date"
+	@echo "  codegen-conversion   Generate REST types and conversion functions from CRD types"
+	@echo "  verify-conversion    Fail if conversion outputs are out of date"
+	@echo "  generate-openapi     Generate and merge typed schemas into OpenAPI spec"
+	@echo "  verify-openapi       Fail if OpenAPI spec is out of date with codegen"
+	@echo "  swagger-ui           Run Swagger UI locally (default port 8282)"
+	@echo "  setup-envtest        Install envtest binaries (etcd, kube-apiserver)"
+	@echo "  deps                 Download and tidy all modules"
 	@echo ""
-	@echo "  all            - Run all checks (deps, fmt, vet, lint, test, build)"
+	@echo "Images:"
+	@echo "  image-api            Platform API image"
+	@echo "  image-operator       Seaplane operator image"
 
-# Build the binary
-build:
-	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BINARY_NAME) ./cmd/$(BINARY_NAME)
+# ── Build ────────────────────────────────────────────────────────────────
 
-# Run all unit tests (excludes e2e), ci calls test, so disable mod check here
-test:
-	go test -v -race -count=1 $(shell go list ./... | grep -v '/test/e2e')
+build: build-seaplane-db build-operator build-api
 
-# Run unit tests for a specific package (usage: make test-unit PKG=./pkg/authz/...)
-PKG ?= ./...
-test-unit:
-	go test -v -race -count=1 $(PKG)
+build-seaplane-db:
+	cd seaplane-db && go build ./...
 
-# Run authorization package tests only
-test-authz:
-	go test -v -race -count=1 ./pkg/authz/...
+build-operator:
+	cd seaplane-operator && go build -o ../bin/manager ./cmd/manager
+	cd seaplane-operator && go build -o ../bin/compactor ./cmd/compactor
 
-# Run tests with coverage (excludes e2e)
-test-coverage:
-	go test -v -race -coverprofile=coverage.out $(shell go list ./... | grep -v '/test/e2e')
-	go tool cover -html=coverage.out -o coverage.html
-	@echo "Coverage report: coverage.html"
+build-api:
+	cd seaplane-api && go build -o ../bin/rosa-seaplane-api ./cmd
 
-# Kept for backwards compatibility. Not sure if this is used elsewhere, but feel free to delete
-# if this isn't necessary
+build-api-codegen:
+	cd hack/api-codegen && go build -o ../../bin/passthrough-gen ./cmd/passthrough-gen
+	cd hack/api-codegen && go build -o ../../bin/marker-scanner ./cmd/marker-scanner
+	cd hack/api-codegen && go build -o ../../bin/openapi-gen ./cmd/openapi-gen
+	cd hack/api-codegen && go build -o ../../bin/openapi-merge ./cmd/openapi-merge
+	cd hack/api-codegen && go build -o ../../bin/conversion-gen ./cmd/conversion-gen
+	cd hack/api-codegen && go build -o ../../bin/crd-variants ./cmd/crd-variants
+	cd hack/api-codegen && go build -o ../../bin/featuregate-info ./cmd/featuregate-info
+	cd hack/api-codegen && go build -o ../../bin/verify-configuration ./cmd/verify-configuration
+
+# ── Test ─────────────────────────────────────────────────────────────────
+
+test: test-unit test-integration
+
+test-unit: test-api test-operator test-api-codegen test-clientset
+
+test-integration: test-seaplane-db test-operator-int test-api-int
+
+test-api-int:
+	cd seaplane-api && go test -v -race -count=1 -tags integration ./pkg/handlers/... ./pkg/authz/...
+
+test-api:
+	cd seaplane-api && go test -v -race -count=1 $(if $(COVERAGE),-covermode=atomic -coverprofile=../coverage-seaplane-api.out,) $$(go list ./... | grep -v '/test/e2e')
+	$(if $(filter html,$(COVERAGE)),cd seaplane-api && go tool cover -html=../coverage-seaplane-api.out -o ../coverage-seaplane-api.html,)
+
+test-api-codegen:
+	cd hack/api-codegen && go test -v -race -count=1 $(if $(COVERAGE),-covermode=atomic -coverprofile=../../coverage-api-codegen.out,) ./...
+	$(if $(filter html,$(COVERAGE)),cd hack/api-codegen && go tool cover -html=../../coverage-api-codegen.out -o ../../coverage-api-codegen.html,)
+
+test-clientset:
+	cd clientset && go test -v -race -count=1 $(if $(COVERAGE),-covermode=atomic -coverprofile=../coverage-clientset.out,) ./...
+	$(if $(filter html,$(COVERAGE)),cd clientset && go tool cover -html=../coverage-clientset.out -o ../coverage-clientset.html,)
+
+test-operator: $(SETUP_ENVTEST)
+	@ASSETS=$$($(SETUP_ENVTEST) use -p path --bin-dir $(ENVTEST_BIN_DIR)) && \
+		echo "envtest assets: $$ASSETS" && \
+		cd seaplane-operator && KUBEBUILDER_ASSETS="$$ASSETS" go test -v -race -count=1 $(if $(COVERAGE),-covermode=atomic -coverprofile=../coverage-seaplane-operator.out,) ./internal/...
+	$(if $(filter html,$(COVERAGE)),cd seaplane-operator && go tool cover -html=../coverage-seaplane-operator.out -o ../coverage-seaplane-operator.html,)
+
+test-seaplane-db:
+	cd seaplane-db && go test -v -race -count=1 ./...
+
+test-operator-int:
+	cd seaplane-operator && go test -v -race -count=1 ./test/...
+
 test-e2e: test-e2e-api
 
-# Run e2e tests (native - works on Linux, macOS, Windows)
-# Excludes CLI tests (use test-e2e-cli for those) and Authz tests (use test-e2e-authz)
-test-e2e-api:
-	E2E_BASE_URL="${BASE_URL}" E2E_ACCOUNT_ID="${E2E_ACCOUNT_ID}" \
-	E2E_RHOBS_API_URL="${RHOBS_API_URL}" \
-	ginkgo -vv \
-	--skip="Authz" --junit-report=junit-api.xml \
-	--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-api
+test-e2e-authz: build-api
+	cd test && AUTHZ_HTTP_REQUIRED=1 AUTHZ_HTTP_API_BINARY=$(CURDIR)/bin/rosa-seaplane-api go test -count=1 -timeout=10m -run '^TestAuthzHTTP$$' -v ./e2e-api
 
-test-e2e-api-quiet:
-	E2E_BASE_URL="${BASE_URL}" E2E_ACCOUNT_ID="${E2E_ACCOUNT_ID}" \
-	E2E_RHOBS_API_URL="${RHOBS_API_URL}" \
-	ginkgo --skip="Authz" \
-	--junit-report=junit-api.xml \
-	--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-api
+test-e2e-api: $(GINKGO)
+	E2E_BASE_URL="$${BASE_URL}" E2E_ACCOUNT_ID="$${E2E_ACCOUNT_ID}" \
+	E2E_RHOBS_API_URL="$${RHOBS_API_URL}" \
+	$(GINKGO) -vv \
+		$(if $(E2E_LABEL_FILTER),--label-filter="$(E2E_LABEL_FILTER)") \
+		--junit-report=junit-api.xml --output-dir=$(TEST_OUTPUT_DIR) \
+		./test/e2e-api
 
-# Run e2e CLI tests only (HCP cluster creation via rosactl)
-# Requires: E2E_BASE_URL, ROSACTL_BIN, AWS_REGION, CUSTOMER_AWS_ACCESS_KEY_ID, CUSTOMER_AWS_SECRET_ACCESS_KEY
-test-e2e-cli:
-	@E2E_BASE_URL="${BASE_URL}" \
-		E2E_ACCOUNT_ID="${E2E_ACCOUNT_ID}" \
-		E2E_RHOBS_API_URL="${RHOBS_API_URL}" \
-		ROSACTL_BIN="${ROSACTL_BIN}" \
-		AWS_REGION="${AWS_REGION}" \
-		ginkgo -vv --junit-report=junit-cli.xml \
+test-e2e-cli: $(GINKGO)
+	E2E_BASE_URL="$${BASE_URL}" E2E_ACCOUNT_ID="$${E2E_ACCOUNT_ID}" \
+	E2E_RHOBS_API_URL="$${RHOBS_API_URL}" \
+	E2E_ALERTMANAGER_URL="$${ALERTMANAGER_URL}" \
+	ROSACTL_BIN="$${ROSACTL_BIN}" AWS_REGION="$${AWS_REGION}" \
+	OCP_IMAGE="$${OCP_IMAGE}" \
+	$(GINKGO) -vv --junit-report=junit-cli.xml \
 		$(if $(E2E_LABEL_FILTER),--label-filter="$(E2E_LABEL_FILTER)") \
 		--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-cli
 
-test-e2e-platform-monitoring:
-	E2E_RHOBS_API_URL="${RHOBS_API_URL}" \
-	ginkgo -vv --junit-report=junit-platform-monitoring.xml \
-	--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-platform-monitoring
+test-e2e-platform-monitoring: $(GINKGO)
+	E2E_BASE_URL="$${BASE_URL}" E2E_ACCOUNT_ID="$${E2E_ACCOUNT_ID}" \
+	E2E_RHOBS_API_URL="$${RHOBS_API_URL}" \
+	$(GINKGO) -vv --junit-report=junit-platform-monitoring.xml \
+		--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-platform-monitoring
 
-# Run just the AWS credentials check test
-test-e2e-awscreds:
-	ginkgo -vv --focus="AWS Credentials Check" ./test/e2e-api
+test-e2e-sdk: $(GINKGO)
+	E2E_BASE_URL="$${BASE_URL}" \
+	E2E_ACCOUNT_ID="$${E2E_ACCOUNT_ID}" \
+	E2E_CUSTOMER_ACCOUNT_ID="$${E2E_CUSTOMER_ACCOUNT_ID}" \
+	CUSTOMER_AWS_PROFILE="$${CUSTOMER_AWS_PROFILE}" \
+	RC_AWS_PROFILE="$${RC_AWS_PROFILE}" \
+	AWS_REGION="$${AWS_REGION}" \
+	ROSACTL_BIN="$${ROSACTL_BIN}" \
+	OCP_IMAGE="$${OCP_IMAGE}" \
+	$(GINKGO) -vv --timeout=3h --junit-report=junit-sdk.xml \
+		--output-dir=$(TEST_OUTPUT_DIR) ./test/e2e-sdk
 
-# E2E infrastructure targets
-.PHONY: e2e-authz-infra-up e2e-authz-infra-down e2e-init-db test-e2e-authz
+test-e2e-rosa-cli:
+	@ROSA_TMPDIR=$$(mktemp -d) && \
+	trap "rm -rf $$ROSA_TMPDIR" EXIT && \
+	echo "Temporary directory: $$ROSA_TMPDIR" && \
+	echo "Cloning rosa repo from $(ROSA_REPO_URL)@$(ROSA_REPO_BRANCH)..." && \
+	git clone --depth=1 --branch $(ROSA_REPO_BRANCH) $(ROSA_REPO_URL) $$ROSA_TMPDIR && \
+	echo "Building rosa CLI..." && \
+	cd $$ROSA_TMPDIR && $(MAKE) $(ROSA_BUILD_TARGET) && \
+	export PATH="$$PWD:$$PATH" && \
+	echo "Running rosa cli E2E tests..." && \
+	name=$${CLUSTER_NAME:-hf-e2e-$$(date +%s)} && \
+	export SEAPLANE_URL="$${SEAPLANE_URL}" && \
+	export CLUSTER_NAME="$$name" && \
+	export OPERATOR_ROLES_PREFIX="$${OPERATOR_ROLES_PREFIX:-$$name}" && \
+	export AWS_DEFAULT_REGION="$${AWS_DEFAULT_REGION:-$${AWS_REGION}}" && \
+	export GOTOOLCHAIN=auto && \
+	export TEST_PROFILE="$${TEST_PROFILE}" && \
+	export TEST_PROFILE_DIR="$$ROSA_TMPDIR/tests/ci/data/profiles" && \
+	export WORKSPACE="$$ROSA_TMPDIR" && \
+	if [ -n "$(ROSA_SKIP)$(ROSA_LABEL_FILTER)" ]; then \
+		echo "Running with custom ginkgo filters..." && \
+		$(GINKGO) run -v --timeout 3h \
+			--junit-report=junit-rosa-cli.xml \
+			--output-dir=$(TEST_OUTPUT_DIR) \
+			$(if $(ROSA_SKIP),--skip="$(ROSA_SKIP)") \
+			$(if $(ROSA_LABEL_FILTER),--label-filter="$(ROSA_LABEL_FILTER)") \
+			./tests/e2e/; \
+	else \
+		echo "Running default rosa e2e-seaplane target..." && \
+		$(MAKE) \
+			TEST_PROFILE="$${TEST_PROFILE}" \
+			TEST_PROFILE_DIR="$$ROSA_TMPDIR/tests/ci/data/profiles" \
+			WORKSPACE="$$ROSA_TMPDIR" \
+			$(ROSA_MAKE_TARGET); \
+	fi
 
-# Start DynamoDB Local and cedar-agent containers
-e2e-authz-infra-up:
-	podman-compose -f hack/podman-compose.e2e-authz.yaml up -d
-	@echo "Waiting for services to be ready..."
-	@sleep 5
-	@$(MAKE) e2e-init-db
 
-# Stop E2E infrastructure
-e2e-authz-infra-down:
-	podman-compose -f hack/podman-compose.e2e-authz.yaml down -v
+# ── Code Quality ─────────────────────────────────────────────────────────
 
-# Initialize DynamoDB tables
-e2e-init-db:
-	./scripts/e2e-init-dynamodb.sh
-
-# Run authz E2E tests (starts infrastructure, runs tests, keeps infra running)
-test-e2e-authz: e2e-authz-infra-up
-	@./scripts/run-e2e-authz.sh
-
-# Run authz E2E tests with cleanup (stops infrastructure after tests)
-test-e2e-authz-clean: test-e2e-authz e2e-authz-infra-down
-
-# Format code
 fmt:
-	go fmt ./...
+	cd seaplane-db && go fmt ./...
+	cd seaplane-operator && go fmt ./...
+	cd seaplane-api && go fmt ./...
+	cd hack/api-codegen && go fmt ./...
+	cd clientset && go fmt ./...
+	cd hack/clientset/cmd/bridge-gen && go fmt ./...
 
-# Run go vet
 vet:
-	go vet ./...
+	cd seaplane-db && go vet ./...
+	cd seaplane-operator && go vet ./...
+	cd seaplane-api && go vet ./...
+	cd hack/api-codegen && go vet ./...
+	cd clientset && go vet ./...
+	cd hack/clientset/cmd/bridge-gen && go vet ./...
 
-# Run linter
-lint:
-	golangci-lint run ./...
+lint: $(GOLANGCI_LINT)
+	cd seaplane-db && $(GOLANGCI_LINT) run --config ../.golangci.yml --timeout 5m ./...
+	cd seaplane-operator && $(GOLANGCI_LINT) run --config ../.golangci.yml --timeout 5m ./...
+	cd seaplane-api && $(GOLANGCI_LINT) run --config ../.golangci.yml --timeout 5m ./...
+	cd hack/api-codegen && $(GOLANGCI_LINT) run --config ../../.golangci.yml --timeout 5m ./...
+	cd clientset && $(GOLANGCI_LINT) run --config ../.golangci.yml --timeout 5m ./...
+	cd hack/clientset/cmd/bridge-gen && $(GOLANGCI_LINT) run --config $(abspath .golangci.yml) --timeout 5m ./...
 
-# Run linter in CI container with fresh clone (reproduces Prow CI exactly)
-lint-ci-container:
-	@echo "Building CI container image..."
-	docker build -f ci/Containerfile -t $(CI_IMAGE_REPO):$(CI_IMAGE_TAG) .
-	@echo "Running linter in CI container with fresh clone from $(REPO_URL)@$(GIT_REF)..."
-	docker run --rm \
-		$(CI_IMAGE_REPO):$(CI_IMAGE_TAG) \
-		bash -c "git clone $(REPO_URL) /tmp/repo && cd /tmp/repo && git checkout $(GIT_REF) && ./ci/lint.sh"
+# All Go modules in the repo (used by verify and MintMaker/Renovate post-upgrade).
+override MOD_TIDY_DIRS := seaplane-db api seaplane-operator seaplane-api test clientset hack/tools hack/api-codegen
+MOD_TIDY_FILES := $(foreach d,$(MOD_TIDY_DIRS),$(d)/go.mod $(d)/go.sum)
 
-# Clean build artifacts
-clean:
-	rm -f $(BINARY_NAME)
-	rm -f coverage.out coverage.html
+mod-tidy:
+	@set -e; for d in $(MOD_TIDY_DIRS); do \
+		echo "go mod tidy: $$d"; \
+		(cd "$$d" && go mod tidy); \
+	done
 
-# Build Docker image
-image:
-	docker build --platform $(GOOS)/$(GOARCH) -t $(IMAGE_REPO):$(IMAGE_TAG) .
-	docker tag $(IMAGE_REPO):$(IMAGE_TAG) $(IMAGE_REPO):$(GIT_SHA)
+verify-mod: mod-tidy
+	git diff --exit-code $(MOD_TIDY_FILES)
 
-# Build E2E test container (single platform)
-image-e2e:
-	docker build -f Containerfile.e2e \
-		--platform $(GOOS)/$(GOARCH) \
-		-t $(IMAGE_REPO)-e2e:$(IMAGE_TAG) .
-	docker tag $(IMAGE_REPO)-e2e:$(IMAGE_TAG) $(IMAGE_REPO)-e2e:$(GIT_SHA)
-
-# Build E2E test container for multiple architectures
-image-e2e-multiarch:
-	docker buildx build -f Containerfile.e2e \
-		--platform $(PLATFORMS) \
-		-t $(IMAGE_REPO)-e2e:$(IMAGE_TAG) \
-		-t $(IMAGE_REPO)-e2e:$(GIT_SHA) \
-		--load .
-
-# Build and push E2E test container for multiple architectures
-image-e2e-push-multiarch:
-	docker buildx build -f Containerfile.e2e \
-		--platform $(PLATFORMS) \
-		-t $(IMAGE_REPO)-e2e:$(IMAGE_TAG) \
-		-t $(IMAGE_REPO)-e2e:$(GIT_SHA) \
-		--push .
-
-# Build ginkgo command with focus/skip flags
-GINKGO_CMD := ginkgo -vv
-ifneq ($(FOCUS),)
-	GINKGO_CMD += --focus="$(FOCUS)"
-endif
-ifneq ($(SKIP),)
-	GINKGO_CMD += --skip="$(SKIP)"
-endif
-GINKGO_CMD += --junit-report=junit.xml --output-dir=/app/test-results ./test/e2e-api
-
-# Since we're using dynamic credentials in our aws config, we need to export the
-# credentials to the container
-test-e2e-container: image-e2e-multiarch
-	@echo "✅ Exporting static credentials from profile $(AWS_PROFILE)..."
-	@eval "$$(aws configure export-credentials --profile $(AWS_PROFILE) --format env-no-export)" && \
-	docker run --rm \
-		-e E2E_BASE_URL="$(BASE_URL)" \
-		-e E2E_ACCOUNT_ID="$(E2E_ACCOUNT_ID)" \
-		-e AWS_ACCESS_KEY_ID="$$AWS_ACCESS_KEY_ID" \
-		-e AWS_SECRET_ACCESS_KEY="$$AWS_SECRET_ACCESS_KEY" \
-		-e AWS_SESSION_TOKEN="$$AWS_SESSION_TOKEN" \
-		-e AWS_REGION="$(AWS_REGION)" \
-		-v $(PWD)/test-results:/app/test-results \
-		$(IMAGE_REPO)-e2e:$(IMAGE_TAG) \
-		$(GINKGO_CMD)
-
-# Push Docker image
-image-push: image
-	docker push $(IMAGE_REPO):$(IMAGE_TAG)
-	docker push $(IMAGE_REPO):$(GIT_SHA)
-
-# Run locally
-run: build
-	./$(BINARY_NAME) serve \
-		--log-level=debug \
-		--log-format=text \
-		--maestro-url=http://localhost:8001 \
-		--allowed-accounts=123456789012
-
-# Download dependencies
 deps:
-	go mod download
-	go mod tidy
+	@set -e; for d in $(MOD_TIDY_DIRS); do \
+		(cd "$$d" && go mod download && go mod tidy); \
+	done
 
-# Generate OpenAPI code (requires oapi-codegen)
-generate:
-	@echo "OpenAPI code generation not yet configured"
-	@echo "Install oapi-codegen: go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest"
+# ── Code Generation ──────────────────────────────────────────────────────
 
-# Regenerate swagger-ui.html from openapi.yaml (requires yq)
-generate-swagger:
-	@which yq > /dev/null || (echo "Error: yq is required. Install with: brew install yq" && exit 1)
-	@echo "Generating openapi/swagger-ui.html from openapi/openapi.yaml..."
-	@( \
-		echo '<!DOCTYPE html>'; \
-		echo '<html lang="en">'; \
-		echo '<head>'; \
-		echo '  <meta charset="UTF-8">'; \
-		echo '  <title>ROSA Regional Platform API - Swagger UI</title>'; \
-		echo '  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui.css">'; \
-		echo '  <style>'; \
-		echo '    html {'; \
-		echo '      box-sizing: border-box;'; \
-		echo '      overflow: -moz-scrollbars-vertical;'; \
-		echo '      overflow-y: scroll;'; \
-		echo '    }'; \
-		echo '    *, *:before, *:after {'; \
-		echo '      box-sizing: inherit;'; \
-		echo '    }'; \
-		echo '    body {'; \
-		echo '      margin: 0;'; \
-		echo '      padding: 0;'; \
-		echo '    }'; \
-		echo '  </style>'; \
-		echo '</head>'; \
-		echo '<body>'; \
-		echo '  <div id="swagger-ui"></div>'; \
-		echo '  <script src="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui-bundle.js"></script>'; \
-		echo '  <script src="https://unpkg.com/swagger-ui-dist@5.10.5/swagger-ui-standalone-preset.js"></script>'; \
-		echo '  <script>'; \
-		echo '    window.onload = function() {'; \
-		echo '      const ui = SwaggerUIBundle({'; \
-		echo "        url: window.location.origin + '/openapi.yaml',"; \
-		echo '        spec: '; \
-		yq eval -o=json -I=2 '.' openapi/openapi.yaml | sed 's/^/  /'; \
-		echo ','; \
-		echo "        dom_id: '#swagger-ui',"; \
-		echo '        deepLinking: true,'; \
-		echo '        presets: ['; \
-		echo '          SwaggerUIBundle.presets.apis,'; \
-		echo '          SwaggerUIStandalonePreset'; \
-		echo '        ],'; \
-		echo '        plugins: ['; \
-		echo '          SwaggerUIBundle.plugins.DownloadUrl'; \
-		echo '        ],'; \
-		echo '        layout: "StandaloneLayout"'; \
-		echo '      });'; \
-		echo '      window.ui = ui;'; \
-		echo '    };'; \
-		echo '  </script>'; \
-		echo '</body>'; \
-		echo '</html>'; \
-	) > docs/index.html
-	@echo "Done! Generated docs/index.html"
+CRD_VARIANTS     := $(abspath bin/crd-variants)
+CRD_BASES_DIR    := seaplane-operator/config/crd/bases
 
-# Verify go.mod is tidy
-verify:
-	go mod tidy
-	git diff --exit-code go.mod go.sum
+manifests: codegen-passthrough codegen-conversion $(CONTROLLER_GEN) build-api-codegen
+	cd seaplane-operator && $(CONTROLLER_GEN) crd:allowDangerousTypes=true paths="../api/v1alpha1" output:crd:dir=config/crd/bases
+	$(CRD_VARIANTS) --strip-passthrough-cel --api-dir api/v1alpha1 --crd-dir $(CRD_BASES_DIR)
 
-# All checks
+generate-deepcopy: codegen-passthrough $(CONTROLLER_GEN)
+	$(CONTROLLER_GEN) object paths="./api/..."
+
+generate-clientset: codegen-conversion $(CLIENT_GEN) $(BRIDGE_GEN)
+	cd api && $(CLIENT_GEN) \
+		--input-base "$(SDK_API_PKG)" \
+		--input "$(SDK_INPUT)" \
+		--clientset-name "$(SDK_CLIENTSET)" \
+		--output-dir "$(SDK_OUTPUT_DIR)" \
+		--output-pkg "$(SDK_OUTPUT_PKG)" \
+		--go-header-file "$(SDK_HEADER_FILE)"
+	$(BRIDGE_GEN) \
+		--mode platform \
+		--input-dir "$(BRIDGE_INPUT_DIR)" \
+		--output-dir "$(PLATFORM_OUTPUT_DIR)" \
+		--output-pkg "$(PLATFORM_OUTPUT_PKG)" \
+		--typed-pkg-import "$(TYPED_PKG_IMPORT)" \
+		--typed-client-prefix "V1alpha1Public" \
+		--api-pkg-import "$(API_PKG_IMPORT)" \
+		--go-header-file "$(SDK_HEADER_FILE)"
+
+verify-clientset: generate-clientset
+	git diff --exit-code -- clientset/generated/ clientset/platform/
+
+codegen-passthrough: codegen-registry
+	cd api && ../bin/passthrough-gen \
+		-import-path github.com/openshift/hypershift/api/hypershift/v1beta1 \
+		-types HostedClusterSpec,NodePoolSpec \
+		-output-dir v1alpha1 \
+		-package v1alpha1 \
+		-registry ../hack/api-codegen/pkg/registry/field_metadata.json
+	rm -f api/v1alpha1/zz_generated.passthrough.go.raw
+	$(MAKE) codegen-registry
+
+codegen-passthrough-clobber:
+	rm -f api/v1alpha1/zz_generated.passthrough.go
+	cd api && ../bin/passthrough-gen \
+  		-import-path github.com/openshift/hypershift/api/hypershift/v1beta1 \
+  		-types HostedClusterSpec,NodePoolSpec \
+  		-output-dir v1alpha1 \
+  		-package v1alpha1 \
+		-registry ../hack/api-codegen/pkg/registry/field_metadata.json
+
+codegen-registry: build-api-codegen
+	./bin/marker-scanner \
+		-input-dirs api/v1alpha1 \
+		-output-file hack/api-codegen/pkg/registry/field_metadata.go \
+		$(if $(VERBOSE),-verbose)
+
+codegen-verify: codegen-registry
+	cd api && go build ./...
+	cd seaplane-api && go build ./...
+
+codegen: codegen-verify
+
+verify-codegen: codegen
+	git diff --exit-code api/v1alpha1/zz_generated.deepcopy.go
+	git diff --exit-code hack/api-codegen/pkg/registry/
+
+# generate runs all code generators in dependency order.
+# manifests and generate-deepcopy depend on codegen-passthrough so regenerated
+# passthrough types complete before downstream generators run, including -j.
+generate-pathbind-draft: $(PATHBIND_GEN) codegen-registry generate-openapi
+	$(PATHBIND_GEN) \
+		--mode=init \
+		--registry=hack/api-codegen/pkg/registry/field_metadata.json \
+		--openapi=api/v1alpha1/public/openapi.yaml \
+		--output=clientset/pathbind/pathbind-draft.yaml
+
+# codegen-passthrough must complete before conversion-gen, manifests, and
+# generate-deepcopy so all downstream generators see the regenerated markers.
+generate: codegen-passthrough codegen-conversion generate-deepcopy manifests generate-clientset generate-openapi generate-pathbind-draft
+
+verify-pathbind-draft: generate-pathbind-draft
+	git diff --exit-code clientset/pathbind/pathbind-draft.yaml
+
+verify: verify-codegen verify-conversion verify-clientset verify-openapi verify-pathbind-draft verify-mod
+
+CONVERSION_OUTPUT_DIR   ?= seaplane-api/pkg/conversion/v1alpha1
+CONVERSION_OUTPUT_PKG   ?= github.com/openshift-online/rosa-seaplane-api/seaplane-api/pkg/conversion
+CONVERSION_CRD_PKG      ?= github.com/openshift-online/rosa-seaplane-api/api/v1alpha1
+CONVERSION_REST_DIR     ?= api/v1alpha1/public
+CONVERSION_REST_PKG     ?= github.com/openshift-online/rosa-seaplane-api/api/v1alpha1/public
+
+codegen-conversion: codegen-passthrough codegen-registry build-api-codegen
+	./bin/conversion-gen \
+		--api-version=v1alpha1 \
+		--crd-package=$(CONVERSION_CRD_PKG) \
+		--input-dirs=./api/v1alpha1 \
+		--output-dir=$(CONVERSION_OUTPUT_DIR) \
+		--output-package=$(CONVERSION_OUTPUT_PKG) \
+		--rest-output-dir=$(CONVERSION_REST_DIR) \
+		--rest-package=$(CONVERSION_REST_PKG)
+
+verify-conversion: codegen-conversion
+	cd api && go build ./...
+	cd seaplane-api && go build ./...
+	git diff --exit-code $(CONVERSION_REST_DIR)/ $(CONVERSION_OUTPUT_DIR)/ seaplane-api/pkg/conversion/types.go
+
+generate-openapi: codegen-conversion
+	cd hack/api-codegen && go build -o ../../bin/openapi-gen ./cmd/openapi-gen
+	./bin/openapi-gen \
+		-input-dirs ./api/v1alpha1/public \
+		-output-file $(OPENAPI_GENERATED)
+	# TODO: auto-discover schemas via +seaplane:public-api=true marker so new CRDs
+	# are included automatically — requires extending openapi-merge to scan
+	# generated-schemas.json description fields for the marker text.
+	./bin/openapi-merge \
+		-spec $(OPENAPI_SPEC) \
+		-generated $(OPENAPI_GENERATED) \
+		-schemas Cluster,ClusterList,ClusterSpec,ClusterStatus,NodePool,NodePoolList,NodePoolSpec,NodePoolStatus,OidcConfig,OidcConfigList,OidcConfigStatus,DNSReservation,DNSReservationList,DNSReservationSpec,DNSReservationStatus,PlacementReference,Capabilities,HostedClusterSpecPassthrough,NodePoolSpecPassthrough,ClusterConfiguration,KubeletConfig,MachineConfigSpec,PlatformSpec,NodePoolPlatform
+
+verify-openapi: generate-openapi
+	git diff --exit-code $(OPENAPI_SPEC)
+
+swagger-ui:
+	@echo "Swagger UI available at http://localhost:$(SWAGGER_UI_PORT)"
+	$(CONTAINER_ENGINE) run --rm -p $(SWAGGER_UI_PORT):8080 \
+		-e SWAGGER_JSON=/spec/openapi.yaml \
+		-v $(CURDIR)/$(OPENAPI_SPEC):/spec/openapi.yaml:ro \
+		swaggerapi/swagger-ui
+
+ENVTEST_BIN_DIR ?= $(shell pwd)/.envtest
+
+setup-envtest: $(SETUP_ENVTEST)
+	$(SETUP_ENVTEST) use --bin-dir $(ENVTEST_BIN_DIR)
+
+# ── Images ───────────────────────────────────────────────────────────────
+
+image-api:
+	$(CONTAINER_ENGINE) build -f seaplane-api/Containerfile \
+		--platform $(GOOS)/$(GOARCH) \
+		-t $(IMAGE_REPO_API):$(IMAGE_TAG) .
+	$(CONTAINER_ENGINE) tag $(IMAGE_REPO_API):$(IMAGE_TAG) $(IMAGE_REPO_API):$(GIT_SHA)
+
+image-operator:
+	$(CONTAINER_ENGINE) build -f seaplane-operator/Containerfile \
+		--platform $(GOOS)/$(GOARCH) \
+		-t $(IMAGE_REPO_OPERATOR):$(IMAGE_TAG) .
+	$(CONTAINER_ENGINE) tag $(IMAGE_REPO_OPERATOR):$(IMAGE_TAG) $(IMAGE_REPO_OPERATOR):$(GIT_SHA)
+
+image-push-api: image-api
+	$(CONTAINER_ENGINE) push $(IMAGE_REPO_API):$(IMAGE_TAG)
+	$(CONTAINER_ENGINE) push $(IMAGE_REPO_API):$(GIT_SHA)
+
+image-push-operator: image-operator
+	$(CONTAINER_ENGINE) push $(IMAGE_REPO_OPERATOR):$(IMAGE_TAG)
+	$(CONTAINER_ENGINE) push $(IMAGE_REPO_OPERATOR):$(GIT_SHA)
+
+# ── Clean ────────────────────────────────────────────────────────────────
+
+clean:
+	rm -rf bin/
+	rm -f coverage.out coverage.html coverage-*.out coverage-*.html
+	rm -rf test-results/
+
+clean-test-containers:
+	@$(CONTAINER_ENGINE) ps -a --format "{{.Names}}" \
+	  | grep -E "^pgctl-" \
+	  | xargs -r $(CONTAINER_ENGINE) rm -f \
+	  && echo "test containers removed" || true
+
+# ── All ──────────────────────────────────────────────────────────────────
+
 all: deps fmt vet lint test build

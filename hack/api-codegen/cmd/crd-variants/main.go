@@ -1,0 +1,111 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"strings"
+
+	"github.com/openshift-online/rosa-seaplane-api/hack/api-codegen/pkg/featuregate"
+)
+
+func main() {
+	var (
+		inputFile           = flag.String("input", "", "Input CRD YAML file")
+		outputDir           = flag.String("output-dir", "config/crd/variants", "Output directory for CRD variants")
+		baseName            = flag.String("base-name", "", "Base name for output files (e.g., 'cluster' produces cluster_default.yaml)")
+		resourceType        = flag.String("resource-type", "", "Resource type Kind (e.g., Cluster, NodePool) for field metadata lookup")
+		featureSet          = flag.String("feature-set", "", "Generate only one feature set variant (default, techpreview, devpreview)")
+		stripPassthroughCEL = flag.Bool("strip-passthrough-cel", false, "Strip x-kubernetes-validations from passthrough subtrees detected in --api-dir")
+		apiDir              = flag.String("api-dir", "", "Go source directory to scan for passthrough types (used with --strip-passthrough-cel)")
+		crdDir              = flag.String("crd-dir", "", "Directory containing CRD YAML files (used with --strip-passthrough-cel)")
+	)
+
+	flag.Parse()
+
+	// --strip-passthrough-cel: auto-detect passthrough fields and strip in-place.
+	if *stripPassthroughCEL {
+		if *apiDir == "" || *crdDir == "" {
+			fmt.Fprintln(os.Stderr, "Error: --api-dir and --crd-dir are required with --strip-passthrough-cel")
+			flag.Usage()
+			os.Exit(1)
+		}
+		targets, err := featuregate.DetectPassthroughTargets(*apiDir, *crdDir)
+		if err != nil {
+			log.Fatalf("Detecting passthrough targets: %v", err)
+		}
+		if len(targets) == 0 {
+			fmt.Println("No passthrough fields detected — nothing to strip.")
+			return
+		}
+		for _, t := range targets {
+			if err := featuregate.StripCELFromSubtrees(t.CRDFile, t.Paths); err != nil {
+				log.Fatalf("Stripping CEL from %s: %v", t.CRDFile, err)
+			}
+			fmt.Printf("Stripped x-kubernetes-validations from %s in %s\n",
+				strings.Join(t.Paths, ", "), t.CRDFile)
+		}
+		return
+	}
+
+	if *inputFile == "" {
+		fmt.Fprintln(os.Stderr, "Error: --input is required")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	if *baseName == "" {
+		fmt.Fprintln(os.Stderr, "Error: --base-name is required")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	if *resourceType == "" {
+		fmt.Fprintln(os.Stderr, "Error: --resource-type is required (e.g., Cluster, NodePool)")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	// Create output directory
+	if err := os.MkdirAll(*outputDir, 0755); err != nil {
+		log.Fatalf("Creating output directory: %v", err)
+	}
+
+	g := featuregate.NewCRDVariantGenerator(*resourceType)
+
+	if *featureSet != "" {
+		// Generate single variant
+		var fs featuregate.FeatureSet
+		switch *featureSet {
+		case "default":
+			fs = featuregate.Default
+		case "techpreview":
+			fs = featuregate.TechPreviewNoUpgrade
+		case "devpreview":
+			fs = featuregate.DevPreviewNoUpgrade
+		default:
+			log.Fatalf("Invalid feature set: %s (must be default, techpreview, or devpreview)", *featureSet)
+		}
+
+		outputPath := fmt.Sprintf("%s/%s_%s.yaml", *outputDir, *baseName, *featureSet)
+		fmt.Printf("Generating %s variant: %s\n", *featureSet, outputPath)
+
+		if err := g.GenerateVariant(*inputFile, outputPath, fs); err != nil {
+			log.Fatalf("Generating variant: %v", err)
+		}
+
+		fmt.Printf("✓ Generated %s variant\n", *featureSet)
+	} else {
+		// Generate all variants
+		fmt.Printf("Generating all CRD variants from %s to %s/\n", *inputFile, *outputDir)
+
+		if err := g.GenerateAllVariants(*inputFile, *outputDir, *baseName); err != nil {
+			log.Fatalf("Generating variants: %v", err)
+		}
+
+		fmt.Printf("✓ Generated default variant: %s/%s_default.yaml\n", *outputDir, *baseName)
+		fmt.Printf("✓ Generated techpreview variant: %s/%s_techpreview.yaml\n", *outputDir, *baseName)
+		fmt.Printf("✓ Generated devpreview variant: %s/%s_devpreview.yaml\n", *outputDir, *baseName)
+	}
+}

@@ -1,41 +1,53 @@
-# Build stage
-FROM golang:1.25-alpine AS builder
+FROM registry.access.redhat.com/ubi9/go-toolset:9.8-1793232557 AS builder
+USER root
 
-# Build arguments for OS and architecture support
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 
 WORKDIR /app
 
-# Install build dependencies
-RUN apk add --no-cache git ca-certificates
+COPY seaplane-db/go.mod seaplane-db/go.sum ./seaplane-db/
+COPY api/go.mod api/go.sum ./api/
+COPY hack/api-codegen/go.mod hack/api-codegen/go.sum ./hack/api-codegen/
+COPY seaplane-api/go.mod seaplane-api/go.sum ./seaplane-api/
+RUN cd seaplane-api && go mod download
 
-# Copy go mod files
-COPY go.mod go.sum ./
-RUN go mod download
+COPY seaplane-db/ ./seaplane-db/
+COPY api/ ./api/
+COPY hack/api-codegen/ ./hack/api-codegen/
+COPY seaplane-api/ ./seaplane-api/
 
-# Copy source code
-COPY . .
-
-# Build the binary
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
+RUN cd seaplane-api && \
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
+    -buildvcs=false \
     -ldflags="-w -s" \
-    -o rosa-regional-platform-api \
-    ./cmd/rosa-regional-platform-api
+    -o /app/rosa-seaplane-api \
+    ./cmd
 
-# Runtime stage
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.8-1793050346
+
+ARG VERSION=0.0.1
+ARG RELEASE=1
+
+LABEL name="rosa-seaplane-api" \
+      vendor="Red Hat, Inc." \
+      version="${VERSION}" \
+      release="${RELEASE}" \
+      summary="ROSA Seaplane platform API" \
+      description="ROSA Seaplane platform API service" \
+      io.k8s.display-name="rosa-seaplane-api" \
+      io.k8s.description="ROSA Seaplane platform API service" \
+      com.redhat.component="rosa-seaplane-api-container" \
+      distribution-scope="public" \
+      url="https://github.com/openshift-online/rosa-seaplane-api"
 
 WORKDIR /app
 
-# Copy the binary from builder
-COPY --from=builder /app/rosa-regional-platform-api /app/rosa-regional-platform-api
+COPY --from=builder /app/rosa-seaplane-api /app/rosa-seaplane-api
 
-# Expose ports
-EXPOSE 8000 8080 9090
+EXPOSE 8000 8081 9090
 
-# Run as non-root user
-USER nonroot:nonroot
+USER 65534:65534
 
-ENTRYPOINT ["/app/rosa-regional-platform-api"]
+ENTRYPOINT ["/app/rosa-seaplane-api"]
 CMD ["serve"]
